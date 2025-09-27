@@ -1,86 +1,251 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap");
 
-/* الإعدادات الأساسية */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
-    background-color: #f3e8ff;
-    font-family: 'Cairo', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
+  background-color: #f3e8ff;
+  font-family: "Cairo", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 30px;
+  overflow-x: hidden;
 }
 
 .card {
-    background-color: white;
-    max-width: 400px;
-    width: 100%;
-    padding: 25px;
-    border-radius: 25px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  background-color: white;
+  max-width: 400px;
+  width: 100%;
+  padding: 35px;
+  border-radius: 25px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  overflow: hidden;
 }
 
 .message {
-    color: #333;
-    line-height: 1.8;
-    text-align: justify;
-    margin-bottom: 25px;
-    font-size: 1rem;
+  color: #333;
+  line-height: 1.8;
+  text-align: justify;
+  font-size: 1rem;
+  margin-bottom: 25px;
 }
 
-/* --- هنا يبدأ التغيير الجذري --- */
+/* --- تصميم زر رسالة اليوم --- */
+.daily-message-trigger {
+  margin-bottom: 25px;
+}
+.message-title {
+  color: #555;
+  font-size: 1.2em;
+  margin-bottom: 15px;
+}
+.envelope {
+  font-size: 3em;
+  color: #8a2be2;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.envelope:hover {
+  transform: scale(1.1);
+}
+.heart-icon {
+  position: absolute;
+  font-size: 0.5em;
+  color: #ff3b3b;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
-/* حاوية الصور */
+/* --- معرض الصور --- */
 .image-container {
-    position: relative;
-    width: 100%;
-    padding-top: 100%; /* للحفاظ على شكل مربع */
-    margin: 40px 0; /* مساحة إضافية لتظهر الكروت بشكل جيد */
-    cursor: pointer;
-    -webkit-user-select: none;
-    user-select: none;
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  margin: 50px 0;
+  cursor: pointer;
+  user-select: none;
 }
-
-/* تنسيق جميع الصور داخل الحاوية */
 .image-container img {
-    position: absolute; /* لوضع كل الصور فوق بعضها في نفس المكان */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 18px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-    /* حركة ناعمة عند تغيير ترتيب الصور */
-    transition: transform 0.4s ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 18px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s ease-in-out;
 }
-
-/* تطبيق تأثير الميلان على كل صورة بشكل مختلف */
 .image-container img:nth-child(1) {
-    transform: rotate(-10deg) translateX(-15%);
-    z-index: 1;
+  transform: rotate(-10deg) translateX(-10%);
+  z-index: 1;
 }
 .image-container img:nth-child(2) {
-    transform: rotate(-5deg);
-    z-index: 2;
+  transform: rotate(-5deg);
+  z-index: 2;
 }
 .image-container img:nth-child(3) {
-    transform: rotate(5deg);
-    z-index: 3;
+  transform: rotate(5deg);
+  z-index: 3;
 }
 .image-container img:nth-child(4) {
-    transform: scale(1.05) rotate(0deg); /* الصورة العلوية تكون مستقيمة وأكبر قليلاً */
-    z-index: 4;
+  transform: scale(1.02) rotate(0deg);
+  z-index: 4;
 }
 
+/* --- تصميم النافذة المنبثقة للرسالة (Modal) --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1001;
+}
+.modal-overlay.visible {
+  visibility: visible;
+  opacity: 1;
+}
+.modal-content {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 15px;
+  max-width: 90%;
+  width: 400px;
+  text-align: center;
+  position: relative;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+.modal-overlay.visible .modal-content {
+  transform: scale(1);
+}
+.popup-message {
+  font-size: 1.1em;
+  line-height: 1.7;
+  color: #333;
+}
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  color: #aaa;
+  cursor: pointer;
+}
+.close-button:hover {
+  color: #333;
+}
 
-/* الأقسام السفلية (تبقى كما هي) */
-.widgets-container { display: flex; justify-content: space-between; text-align: center; gap: 15px; }
-.widget { width: 48%; }
-.widget h3 { font-size: 1em; color: #555; margin-bottom: 5px; }
-.widget p { font-size: 0.8em; color: #777; margin: 0; }
-.countdown-number { font-size: 3.5em; font-weight: 700; color: #8a2be2; margin: 10px 0; }
-.date-note { font-size: 0.75em; color: #999; margin-top: 5px; }
+/* --- تصميم اللايت بوكس (يبقى كما هو) --- */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1000;
+  cursor: pointer;
+}
+.lightbox-overlay.visible {
+  visibility: visible;
+  opacity: 1;
+}
+.lightbox-image {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+  cursor: default;
+}
+/* الأقسام السفلية (تم التعديل) */
+.widgets-container {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  gap: 15px;
+}
+.widget {
+  width: 48%;
+}
+.widget h3 {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 5px;
+}
+.widget p {
+  font-size: 0.8em;
+  color: #777;
+  margin: 0;
+}
+
+/* تم تعديل المحدد هنا ليصبح أقوى */
+.widget .countdown-number {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #8a2be2;
+  margin-top: 15px; /* <-- تم تعديل هذه القيمة لتتطابق مع العداد الآخر */
+  margin-bottom: 10px;
+}
+.date-note {
+  font-size: 0.75em;
+  color: #999;
+  margin-top: 5px;
+}
+
+/* --- تصميم العداد التصاعدي (تم التعديل) --- */
+.counter-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* تم حذف 'flex-direction: row-reverse;' لتصحيح الترتيب */
+  gap: 5px; /* تم تقليل المسافة بين العناصر */
+  margin-top: 15px;
+}
+
+.time-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.time-value {
+  font-size: 1.6em; /* تم تصغير حجم الخط */
+  font-weight: 700;
+  color: #8a2be2;
+  background-color: #f3e8ff;
+  padding: 5px; /* تم تقليل الحشو الداخلي */
+  border-radius: 8px;
+  min-width: 40px; /* تم تقليل أقل عرض للعنصر */
+}
+
+.time-label {
+  font-size: 0.7em;
+  color: #777;
+  margin-top: 5px;
+}
