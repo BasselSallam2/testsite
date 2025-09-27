@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stacked Photos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff0f6;
+      text-align: center;
+      padding: 30px;
+      margin: 0;
+    }
+
+    h3 {
+      margin-bottom: 20px;
+      color: #d63384;
+    }
+
+    /* الحاوية الأساسية */
+    .stack-container {
+      position: relative;
+      width: 280px;
+      height: 360px;
+      margin: auto;
+    }
+
+    /* الصور */
+    .stack-container img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    /* نزحلق الصور اللي ورا شوية */
+    .stack-container img:nth-child(2) {
+      top: 15px;
+      transform: scale(0.97);
+      z-index: -1;
+    }
+    .stack-container img:nth-child(3) {
+      top: 30px;
+      transform: scale(0.94);
+      z-index: -2;
+    }
+    .stack-container img:nth-child(4) {
+      top: 45px;
+      transform: scale(0.91);
+      z-index: -3;
+    }
+  </style>
+</head>
+<body>
+
+  <h3>📸 Love Memories</h3>
+
+  <!-- صور فوق بعض -->
+  <div class="stack-container" id="stack">
+    <img src="https://cdn.mos.cms.futurecdn.net/muMYkLJDgR3D6te4ZyttqX.jpg" alt="Photo 1">
+    <img src="https://picsum.photos/400/400?random=2" alt="Photo 2">
+    <img src="https://picsum.photos/400/400?random=3" alt="Photo 3">
+    <img src="https://picsum.photos/400/400?random=4" alt="Photo 4">
+  </div>
+
+  <script>
+    const stack = document.getElementById("stack");
+    let images = stack.querySelectorAll("img");
+    let current = 0;
+
+    function showNextImage() {
+      const img = images[current];
+      img.style.transform = "translateY(-120%)";
+      img.style.opacity = "0";
+
+      // بعد الأنيميشن رجع الصورة تحت
+      setTimeout(() => {
+        stack.appendChild(img); // ينقلها لآخر الاستاك
+        img.style.transform = "translateY(0)";
+        img.style.opacity = "1";
+        images = stack.querySelectorAll("img"); // ريفريش الترتيب
+        current = 0;
+      }, 400);
+    }
+
+    // بالماوس كليك
+    stack.addEventListener("click", showNextImage);
+
+    // بالموبايل تاتش
+    stack.addEventListener("touchend", showNextImage);
+  </script>
+
+</body>
+</html>
