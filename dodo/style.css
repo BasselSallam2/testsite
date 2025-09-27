@@ -351,28 +351,49 @@ body {
     margin-top: 15px; /* مسافة من الإيموجي */
 }
 
+/* --- تصميم صفحة الخريطة (memories.html) --- */
 
-/* --- تصميم صفحة الخريطة (memories.html) - نسخة مُصححة --- */
-
-/* جعل الخريطة تملأ الشاشة بالكامل */
-#map {
+.map-page-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    z-index: 1; /* الخريطة في الخلف */
+    /* تأخذ ارتفاع الشاشة بالكامل ما عدا ارتفاع شريط التنقل */
+    height: calc(100vh - 70px); 
 }
 
-/* تصميم زر تحديد الموقع */
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+/* تصميم نافذة المعلومات داخل الدبوس (Leaflet Popup) */
+.leaflet-popup-content-wrapper .leaflet-popup-content {
+    font-family: 'Cairo', sans-serif;
+    text-align: center;
+}
+
+.leaflet-popup-content img {
+    max-width: 150px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.leaflet-popup-content p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* --- تصميم زر تحديد الموقع --- */
 .locate-button {
     position: absolute;
-    bottom: 90px; /* فوق شريط التنقل */
+    top: 90px; /* أسفل شريط البحث */
     right: 15px;
-    z-index: 10; /* فوق الخريطة */
+    z-index: 1000; /* ليكون فوق الخريطة */
     background-color: white;
     border: 2px solid #ccc;
-    border-radius: 50%;
+    border-radius: 50%; /* زر دائري */
     width: 40px;
     height: 40px;
     font-size: 1.2em;
@@ -382,28 +403,7 @@ body {
     align-items: center;
     box-shadow: 0 1px 5px rgba(0,0,0,0.4);
 }
+
 .locate-button:hover {
     background-color: #f4f4f4;
-}
-
-/* تصميم أيقونة البحث (GeoSearch) */
-.leaflet-control-geosearch a.glass {
-    border-radius: 50% !important;
-    border: 2px solid #ccc !important;
-}
-
-/* تصميم نافذة المعلومات المنبثقة */
-.leaflet-popup-content-wrapper .leaflet-popup-content {
-    font-family: 'Cairo', sans-serif;
-    text-align: center;
-}
-.leaflet-popup-content img {
-    max-width: 150px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-.leaflet-popup-content p {
-    margin: 0;
-    font-size: 0.9em;
-    color: #555;
 }
